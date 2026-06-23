@@ -10,59 +10,31 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --transition: 0.25s ease; }
-
-    /* Dark theme */
     [data-theme="dark"] {
       --bg: #0f172a; --surface: #1e293b; --surface2: #253349;
       --border: #334155; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
-      --input-bg: #1e293b; --hover: rgba(255,255,255,0.04);
+      --input-bg: #1e293b; --hover: rgba(255,255,255,0.04); --accent: #6366f1;
     }
-    /* Light theme */
     [data-theme="light"] {
       --bg: #f1f5f9; --surface: #ffffff; --surface2: #f8fafc;
       --border: #e2e8f0; --text: #1e293b; --text2: #475569; --text3: #94a3b8;
-      --input-bg: #f8fafc; --hover: rgba(0,0,0,0.03);
+      --input-bg: #f8fafc; --hover: rgba(0,0,0,0.03); --accent: #4f46e5;
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; min-height: 100dvh;
-      transition: background var(--transition), color var(--transition);
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; transition: background var(--transition), color var(--transition); }
     .app { max-width: 600px; margin: 0 auto; padding: 0 16px 100px; }
 
     /* Login */
-    .login-screen {
-      position: fixed; inset: 0; z-index: 1000;
-      background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 32px;
-    }
+    .login-screen { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; }
     .login-screen.hidden { display: none; }
-    .login-logo { font-size: 56px; margin-bottom: 16px; }
-    .login-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .login-logo { font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
     .login-sub { font-size: 14px; color: var(--text3); margin-bottom: 32px; text-align: center; line-height: 1.6; }
-    .login-btn {
-      display: flex; align-items: center; gap: 10px;
-      background: #fff; color: #333;
-      border: none; border-radius: 12px;
-      padding: 14px 28px; font-size: 15px;
-      font-weight: 600; cursor: pointer;
-      transition: all 0.15s; margin-bottom: 12px;
-      width: 280px; justify-content: center;
-    }
+    .login-btn { display: flex; align-items: center; gap: 10px; background: #fff; color: #333; border: none; border-radius: 12px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; margin-bottom: 12px; width: 280px; justify-content: center; }
     .login-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
     .login-btn.email-login { background: var(--accent); color: #fff; }
     .login-divider { font-size: 12px; color: var(--text3); margin: 16px 0; display: flex; align-items: center; gap: 12px; width: 280px; }
     .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .login-email-form { width: 280px; }
-    .login-input {
-      width: 100%; padding: 12px 16px;
-      background: var(--surface); border: 2px solid var(--border);
-      border-radius: 10px; color: var(--text);
-      font-size: 14px; outline: none; margin-bottom: 10px;
-    }
+    .login-input { width: 100%; padding: 12px 16px; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; margin-bottom: 10px; }
     .login-input:focus { border-color: var(--accent); }
     .login-input::placeholder { color: var(--text3); }
     .login-error { color: #ef4444; font-size: 12px; margin-bottom: 8px; min-height: 16px; }
@@ -77,29 +49,14 @@
     .header h1 { font-size: 20px; font-weight: 700; }
     .header-date { font-size: 12px; color: var(--text3); margin-top: 2px; }
     .header-actions { display: flex; gap: 8px; align-items: center; }
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 10px;
-      border: 1.5px solid var(--border); background: transparent;
-      color: var(--text2); font-size: 16px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
+    .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; color: var(--text2); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-weight: 600; }
     .icon-btn:hover { border-color: var(--accent); color: var(--text); }
+    .icon-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; object-fit: cover; }
     .user-menu { position: relative; }
-    .user-dropdown {
-      position: absolute; right: 0; top: 44px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px; min-width: 180px;
-      display: none; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
+    .user-dropdown { position: absolute; right: 0; top: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px; min-width: 160px; display: none; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
     .user-dropdown.open { display: block; }
-    .user-dropdown-item {
-      display: block; width: 100%; padding: 10px 12px;
-      border: none; background: none; color: var(--text2);
-      font-size: 13px; text-align: left; cursor: pointer;
-      border-radius: 8px; transition: background 0.15s;
-    }
+    .user-dropdown-item { display: block; width: 100%; padding: 10px 12px; border: none; background: none; color: var(--text2); font-size: 13px; text-align: left; cursor: pointer; border-radius: 8px; transition: background 0.15s; }
     .user-dropdown-item:hover { background: var(--hover); color: var(--text); }
     .user-dropdown-name { padding: 8px 12px; font-size: 13px; color: var(--text); font-weight: 600; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
 
@@ -113,84 +70,51 @@
     /* Stats */
     .stats { display: flex; gap: 8px; padding: 12px 0; overflow-x: auto; scrollbar-width: none; }
     .stats::-webkit-scrollbar { display: none; }
-    .stat-chip {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 6px 14px;
-      font-size: 12px; color: var(--text2); white-space: nowrap;
-      cursor: pointer; transition: all 0.2s;
-    }
+    .stat-chip { display: flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: var(--text2); white-space: nowrap; cursor: pointer; transition: all 0.2s; }
     .stat-chip:hover, .stat-chip.active { border-color: var(--text2); color: var(--text); }
     .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
 
+    /* Sort bar */
+    .sort-bar { display: flex; align-items: center; gap: 8px; padding: 0 0 8px; font-size: 12px; color: var(--text3); }
+    .sort-btn { background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: 11px; cursor: pointer; color: var(--text3); transition: all 0.2s; font-weight: 500; }
+    .sort-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
     /* Input */
-    .input-box { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; margin: 12px 0 16px; transition: border-color 0.2s, background var(--transition); }
+    .input-box { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; margin: 8px 0 16px; transition: border-color 0.2s, background var(--transition); }
     .input-box:focus-within { border-color: var(--accent); }
-    .input-box textarea {
-      width: 100%; background: transparent; border: none;
-      padding: 16px 16px 8px; font-size: 15px; color: var(--text);
-      outline: none; font-family: inherit; resize: none;
-      min-height: 56px; line-height: 1.5;
-    }
+    .input-box textarea { width: 100%; background: transparent; border: none; padding: 14px 16px 8px; font-size: 15px; color: var(--text); outline: none; font-family: inherit; resize: none; min-height: 56px; line-height: 1.5; }
     .input-box textarea::placeholder { color: var(--text3); }
-    .input-bottom { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px 10px; }
-    .input-options { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; align-items: center; }
+    .input-row { display: flex; align-items: center; padding: 6px 10px 10px; gap: 8px; }
+    .input-row.options { padding-bottom: 4px; }
+    .input-row.send-row { padding-top: 0; justify-content: flex-end; }
+    .input-options { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; align-items: center; flex: 1; }
     .input-options::-webkit-scrollbar { display: none; }
-    .opt-pill {
-      border: 1.5px solid var(--border); background: transparent;
-      border-radius: 20px; padding: 5px 12px;
-      font-size: 12px; cursor: pointer; color: var(--text3);
-      white-space: nowrap; transition: all 0.2s;
-    }
+    .opt-pill { border: 1.5px solid var(--border); background: transparent; border-radius: 20px; padding: 5px 12px; font-size: 12px; cursor: pointer; color: var(--text3); white-space: nowrap; transition: all 0.2s; }
     .opt-pill.active { font-weight: 600; }
     .opt-pill[data-cat="work"].active { border-color: #3b82f6; background: rgba(59,130,246,0.12); color: #3b82f6; }
     .opt-pill[data-cat="life"].active { border-color: #10b981; background: rgba(16,185,129,0.12); color: #10b981; }
     .opt-pill[data-cat="idea"].active { border-color: #f59e0b; background: rgba(245,158,11,0.12); color: #f59e0b; }
     .opt-pill[data-cat="learn"].active { border-color: #6366f1; background: rgba(99,102,241,0.12); color: #6366f1; }
     .opt-pill[data-cat="ai"].active { border-color: #8b5cf6; background: rgba(139,92,246,0.12); color: #8b5cf6; }
-    .priority-group { display: flex; gap: 2px; margin-left: 4px; }
-    .pri-btn {
-      width: 22px; height: 22px; border-radius: 6px;
-      border: 1.5px solid var(--border); background: transparent;
-      font-size: 10px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; color: var(--text3);
-    }
+    .pri-group { display: flex; gap: 4px; }
+    .pri-btn { border: 1.5px solid var(--border); background: transparent; border-radius: 8px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text3); }
     .pri-btn.active.h { border-color: #ef4444; background: rgba(239,68,68,0.15); color: #ef4444; }
     .pri-btn.active.m { border-color: #f59e0b; background: rgba(245,158,11,0.15); color: #f59e0b; }
     .pri-btn.active.l { border-color: #10b981; background: rgba(16,185,129,0.15); color: #10b981; }
-    .send-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--accent); border: none;
-      color: #fff; font-size: 18px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s; flex-shrink: 0;
-    }
+    .send-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); border: none; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
     .send-btn:hover { transform: scale(1.05); }
     .send-btn:active { transform: scale(0.95); }
-    [data-theme="dark"] { --accent: #6366f1; }
-    [data-theme="light"] { --accent: #4f46e5; }
 
     /* Filter */
-    .filter-bar { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none; }
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
     .filter-bar::-webkit-scrollbar { display: none; }
-    .filter-tab {
-      background: transparent; border: none;
-      padding: 6px 12px; font-size: 12px;
-      color: var(--text3); cursor: pointer;
-      border-radius: 8px; white-space: nowrap; transition: all 0.2s;
-    }
+    .filter-tab { background: transparent; border: none; padding: 6px 12px; font-size: 12px; color: var(--text3); cursor: pointer; border-radius: 8px; white-space: nowrap; transition: all 0.2s; }
     .filter-tab:hover { color: var(--text2); background: var(--hover); }
     .filter-tab.active { color: var(--text); background: var(--surface); }
 
     /* Cards */
     .card-list { display: flex; flex-direction: column; gap: 8px; }
-    .card {
-      background: var(--surface); border-radius: 14px;
-      padding: 14px 16px; border-left: 4px solid var(--border);
-      animation: fadeUp 0.2s ease; position: relative;
-      transition: background var(--transition);
-    }
+    .card { background: var(--surface); border-radius: 14px; padding: 14px 16px; border-left: 4px solid var(--border); animation: fadeUp 0.2s ease; position: relative; transition: background var(--transition); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } }
     .card[data-cat="work"] { border-left-color: #3b82f6; }
     .card[data-cat="life"] { border-left-color: #10b981; }
@@ -209,103 +133,83 @@
     .card-tag.idea { background: rgba(245,158,11,0.12); color: #f59e0b; }
     .card-tag.learn { background: rgba(99,102,241,0.12); color: #6366f1; }
     .card-tag.ai { background: rgba(139,92,246,0.12); color: #8b5cf6; }
-    .pri-badge { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
+    .pri-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
     .pri-badge.h { background: #ef4444; color: #fff; }
     .pri-badge.m { background: rgba(245,158,11,0.18); color: #f59e0b; }
     .pri-badge.l { background: rgba(16,185,129,0.15); color: #10b981; }
     .card-time { font-size: 11px; color: var(--text3); }
     .card-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
     .card:hover .card-actions { opacity: 1; }
-    .card-action-btn {
-      width: 28px; height: 28px; border-radius: 8px;
-      border: none; background: transparent;
-      color: var(--text3); font-size: 14px;
-      cursor: pointer; display: flex;
-      align-items: center; justify-content: center; transition: all 0.15s;
-    }
+    .card-action-btn { width: 28px; height: 28px; border-radius: 8px; border: none; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     .card-action-btn:hover { background: var(--hover); color: var(--text); }
     .card-action-btn.del:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
-    .todo-check {
-      width: 20px; height: 20px; border: 2px solid var(--text3);
-      border-radius: 50%; cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; margin-top: 2px;
-    }
+    .todo-check { width: 20px; height: 20px; border: 2px solid var(--text3); border-radius: 50%; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-top: 2px; }
     .todo-check:hover { border-color: var(--accent); }
     .todo-check.checked { background: var(--accent); border-color: transparent; }
-    .todo-check.checked::after { content: "✓"; color: #fff; font-size: 12px; font-weight: 700; }
+    .todo-check.checked::after { content: "\2713"; color: #fff; font-size: 12px; font-weight: 700; }
 
-    /* Category picker popup */
-    .cat-picker {
-      position: absolute; top: 40px; left: 16px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 6px; z-index: 30;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: none;
-    }
+    /* Category picker */
+    .cat-picker { position: absolute; top: 40px; left: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 6px; z-index: 30; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: none; }
     .cat-picker.open { display: block; }
-    .cat-picker-item {
-      display: block; width: 100%; padding: 8px 14px;
-      border: none; background: none; color: var(--text2);
-      font-size: 12px; text-align: left; cursor: pointer;
-      border-radius: 6px; white-space: nowrap; transition: background 0.15s;
-    }
+    .cat-picker-item { display: block; width: 100%; padding: 8px 14px; border: none; background: none; color: var(--text2); font-size: 12px; text-align: left; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: background 0.15s; }
     .cat-picker-item:hover { background: var(--hover); color: var(--text); }
 
     /* Empty */
     .empty { text-align: center; padding: 48px 20px; color: var(--text3); font-size: 14px; }
-    .empty-icon { font-size: 40px; margin-bottom: 8px; }
 
     /* Date separator */
     .date-sep { font-size: 12px; color: var(--text3); font-weight: 600; padding: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
     .date-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* Summary */
-    .summary-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; justify-content: center; align-items: flex-end; }
-    .summary-overlay.open { display: flex; }
-    .summary-panel {
-      background: var(--surface); border-radius: 20px 20px 0 0;
-      width: 100%; max-width: 600px; max-height: 85vh;
-      overflow-y: auto; padding: 24px 20px 40px;
-      animation: slideUp 0.3s ease; transition: background var(--transition);
-    }
+    /* Overlay / Panel */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; justify-content: center; align-items: flex-end; }
+    .overlay.open { display: flex; }
+    .panel { background: var(--surface); border-radius: 20px 20px 0 0; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 24px 20px 40px; animation: slideUp 0.3s ease; transition: background var(--transition); }
     @keyframes slideUp { from { transform: translateY(100%); } }
-    .summary-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
-    .summary-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .summary-sub { font-size: 13px; color: var(--text3); margin-bottom: 20px; }
-    .summary-section { margin-bottom: 16px; }
-    .summary-section h3 { font-size: 13px; color: var(--text2); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-    .summary-item { font-size: 13px; color: var(--text); padding: 8px 12px; background: var(--hover); border-radius: 8px; margin-bottom: 4px; line-height: 1.5; }
-    .summary-count { font-size: 11px; background: var(--border); border-radius: 10px; padding: 1px 8px; color: var(--text2); }
-    .insight-box {
-      background: var(--surface2); border-radius: 14px;
-      padding: 16px; margin-top: 12px;
-      border: 1px solid var(--border);
-      line-height: 1.8; font-size: 13px; color: var(--text);
-    }
+    .panel-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+    .panel-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .panel-sub { font-size: 13px; color: var(--text3); margin-bottom: 20px; }
+    .panel-section { margin-bottom: 16px; }
+    .panel-section h3 { font-size: 13px; color: var(--text2); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .panel-item { font-size: 13px; color: var(--text); padding: 8px 12px; background: var(--hover); border-radius: 8px; margin-bottom: 4px; line-height: 1.5; }
+    .count-badge { font-size: 11px; background: var(--border); border-radius: 10px; padding: 1px 8px; color: var(--text2); }
+    .insight-box { background: var(--surface2); border-radius: 14px; padding: 16px; margin-top: 12px; border: 1px solid var(--border); line-height: 1.8; font-size: 13px; color: var(--text); }
     .insight-box h4 { font-size: 14px; margin-bottom: 8px; }
     .insight-line { padding: 4px 0; border-bottom: 1px solid var(--border); }
     .insight-line:last-child { border: none; }
-    .action-item {
-      font-size: 13px; color: var(--text);
-      padding: 10px 12px; background: var(--hover);
-      border-radius: 10px; margin-bottom: 6px;
-      border-left: 3px solid var(--accent); line-height: 1.5;
-    }
+    .action-item { font-size: 13px; color: var(--text); padding: 10px 12px; background: var(--hover); border-radius: 10px; margin-bottom: 6px; border-left: 3px solid var(--accent); line-height: 1.5; }
     .action-label { font-size: 10px; color: var(--accent); font-weight: 600; margin-bottom: 2px; }
-    .close-summary {
-      display: block; width: 100%; padding: 14px;
-      background: var(--border); border: none;
-      border-radius: 12px; color: var(--text);
-      font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 16px;
-    }
-    .close-summary:hover { opacity: 0.8; }
+    .close-btn { display: block; width: 100%; padding: 14px; background: var(--border); border: none; border-radius: 12px; color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+    .close-btn:hover { opacity: 0.8; }
+    .close-btn.accent { background: var(--accent); }
+
+    /* Time range tabs */
+    .time-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+    .time-tab { background: transparent; border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 12px; cursor: pointer; color: var(--text3); transition: all 0.2s; font-weight: 500; }
+    .time-tab.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .custom-range { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
+    .custom-range input { padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); font-size: 12px; outline: none; }
+    .custom-range input:focus { border-color: var(--accent); }
 
     /* Edit */
     .edit-textarea { width: 100%; background: transparent; border: 2px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--text); outline: none; font-family: inherit; resize: none; min-height: 60px; line-height: 1.5; }
+    .edit-opts { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+    .edit-opts .opt-pill { font-size: 11px; padding: 3px 10px; }
+    .edit-opts .pri-btn { font-size: 10px; padding: 3px 8px; }
     .edit-btns { display: flex; gap: 8px; margin-top: 8px; }
     .edit-btn { padding: 6px 16px; border-radius: 8px; border: none; font-size: 12px; cursor: pointer; font-weight: 600; }
     .edit-save { background: var(--accent); color: #fff; }
     .edit-cancel { background: var(--border); color: var(--text2); }
+
+    /* Export panel */
+    .export-form { margin-bottom: 12px; }
+    .export-form label { font-size: 12px; color: var(--text2); font-weight: 600; display: block; margin-bottom: 6px; }
+    .export-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+    .export-opt { background: transparent; border: 1.5px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 12px; cursor: pointer; color: var(--text3); transition: all 0.2s; }
+    .export-opt.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+    .export-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+    .export-check { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text2); cursor: pointer; }
+    .export-check input { accent-color: var(--accent); }
 
     /* Toast */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 20px; font-size: 13px; color: var(--text); z-index: 200; opacity: 0; transition: opacity 0.3s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
@@ -318,8 +222,7 @@
 <body>
   <!-- Login -->
   <div class="login-screen" id="loginScreen">
-    <div class="login-logo">🧠</div>
-    <div class="login-title">大脑转储</div>
+    <div class="login-logo">Brain Dump</div>
     <div class="login-sub">把脑子里的东西全倒出来<br>登录后可跨设备同步数据</div>
     <button class="login-btn" onclick="loginGoogle()" style="background:#fff;color:#333;">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -330,10 +233,7 @@
       <div class="login-error" id="loginError"></div>
       <input class="login-input" type="email" id="loginEmail" placeholder="邮箱地址">
       <input class="login-input" type="password" id="loginPassword" placeholder="密码（至少6位）">
-      <div class="remember-row">
-        <input type="checkbox" id="rememberMe" checked>
-        <label for="rememberMe">记住我</label>
-      </div>
+      <div class="remember-row"><input type="checkbox" id="rememberMe" checked><label for="rememberMe">记住我</label></div>
       <button class="login-btn email-login" onclick="loginEmail()">登录</button>
       <button class="login-mode-switch" id="loginModeSwitch" onclick="toggleLoginMode()">没有账号？点击注册</button>
     </div>
@@ -344,24 +244,22 @@
     <div class="header">
       <div class="header-top">
         <div>
-          <h1>🧠 大脑转储</h1>
+          <h1>Brain Dump</h1>
           <div class="header-date" id="headerDate"></div>
         </div>
         <div class="header-actions">
-          <span id="syncStatus" style="font-size:11px;color:var(--text3);display:flex;align-items:center;">
-            <span class="sync-dot synced"></span>已同步
-          </span>
-          <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="切换主题">🌙</button>
-          <button class="icon-btn" onclick="showSummary()" title="今日总结">📊</button>
-          <button class="icon-btn" onclick="exportData()" title="导出">📤</button>
+          <span id="syncStatus" style="font-size:11px;color:var(--text3);display:flex;align-items:center;"><span class="sync-dot synced"></span>已同步</span>
+          <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="切换主题"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+          <button class="icon-btn" onclick="showSummary()" title="复盘"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
+          <button class="icon-btn" onclick="showExport()" title="导出"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
           <div class="user-menu">
             <img class="user-avatar" id="userAvatar" src="" alt="" onclick="toggleUserMenu()" style="display:none;">
-            <button class="icon-btn" id="userBtn" onclick="toggleUserMenu()" style="display:none;">👤</button>
+            <button class="icon-btn" id="userBtn" onclick="toggleUserMenu()" style="display:none;"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
             <div class="user-dropdown" id="userDropdown">
               <div class="user-dropdown-name" id="userName"></div>
-              <button class="user-dropdown-item" onclick="showSummary();toggleUserMenu()">📊 今日总结</button>
-              <button class="user-dropdown-item" onclick="exportData();toggleUserMenu()">📤 导出数据</button>
-              <button class="user-dropdown-item" onclick="logout()">🚪 退出登录</button>
+              <button class="user-dropdown-item" onclick="showSummary();toggleUserMenu()">复盘分析</button>
+              <button class="user-dropdown-item" onclick="showExport();toggleUserMenu()">导出数据</button>
+              <button class="user-dropdown-item" onclick="logout()">退出登录</button>
             </div>
           </div>
         </div>
@@ -370,55 +268,59 @@
     </div>
 
     <div class="input-box">
-      <textarea id="dumpInput" placeholder="脑子里在想什么？随便写，一行一条..." rows="2"></textarea>
-      <div class="input-bottom">
+      <textarea id="dumpInput" placeholder="脑子里在想什么？随便写..." rows="2"></textarea>
+      <div class="input-row options">
         <div class="input-options">
-          <button class="opt-pill active" data-cat="work" onclick="setCat('work')">💼 工作</button>
-          <button class="opt-pill" data-cat="life" onclick="setCat('life')">🏠 生活</button>
-          <button class="opt-pill" data-cat="idea" onclick="setCat('idea')">💡 想法</button>
-          <button class="opt-pill" data-cat="learn" onclick="setCat('learn')">📚 学习</button>
-          <button class="opt-pill" data-cat="ai" onclick="setCat('ai')">🤖 AI试试</button>
-          <div class="priority-group">
-            <button class="pri-btn h" onclick="setPri('h')" title="高优先级">H</button>
-            <button class="pri-btn m active" onclick="setPri('m')" title="中优先级">M</button>
-            <button class="pri-btn l" onclick="setPri('l')" title="低优先级">L</button>
-          </div>
+          <button class="opt-pill active" data-cat="work" onclick="setCat('work')">工作</button>
+          <button class="opt-pill" data-cat="life" onclick="setCat('life')">生活</button>
+          <button class="opt-pill" data-cat="idea" onclick="setCat('idea')">想法</button>
+          <button class="opt-pill" data-cat="learn" onclick="setCat('learn')">学习</button>
+          <button class="opt-pill" data-cat="ai" onclick="setCat('ai')">AI试试</button>
         </div>
-        <button class="send-btn" onclick="addEntry()">↑</button>
+      </div>
+      <div class="input-row send-row">
+        <div class="pri-group">
+          <button class="pri-btn h" onclick="setPri('h')">高</button>
+          <button class="pri-btn m active" onclick="setPri('m')">中</button>
+          <button class="pri-btn l" onclick="setPri('l')">低</button>
+        </div>
+        <button class="send-btn" onclick="addEntry()">&#8593;</button>
       </div>
     </div>
 
     <div class="filter-bar">
       <button class="filter-tab active" data-filter="all">全部</button>
-      <button class="filter-tab" data-filter="work">💼 工作</button>
-      <button class="filter-tab" data-filter="life">🏠 生活</button>
-      <button class="filter-tab" data-filter="idea">💡 想法</button>
-      <button class="filter-tab" data-filter="learn">📚 学习</button>
-      <button class="filter-tab" data-filter="ai">🤖 AI试试</button>
+      <button class="filter-tab" data-filter="work">工作</button>
+      <button class="filter-tab" data-filter="life">生活</button>
+      <button class="filter-tab" data-filter="idea">想法</button>
+      <button class="filter-tab" data-filter="learn">学习</button>
+      <button class="filter-tab" data-filter="ai">AI试试</button>
     </div>
-
+    <div class="sort-bar">
+      <span>排序：</span>
+      <button class="sort-btn active" data-sort="time" onclick="setSort('time')">时间</button>
+      <button class="sort-btn" data-sort="pri" onclick="setSort('pri')">优先级</button>
+    </div>
     <div class="card-list" id="cardList"></div>
   </div>
 
-  <div class="summary-overlay" id="summaryOverlay" onclick="if(event.target===this)closeSummary()">
-    <div class="summary-panel" id="summaryPanel"></div>
+  <div class="overlay" id="summaryOverlay" onclick="if(event.target===this)closePanel('summaryOverlay')">
+    <div class="panel" id="summaryPanel"></div>
+  </div>
+  <div class="overlay" id="exportOverlay" onclick="if(event.target===this)closePanel('exportOverlay')">
+    <div class="panel" id="exportPanel"></div>
   </div>
   <div class="toast" id="toast"></div>
 
 <script>
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyAosCltdJIP2Y4fypK42QKVhcTeUbUyXXc",
-  authDomain: "sakitodo.firebaseapp.com",
-  projectId: "sakitodo",
-  storageBucket: "sakitodo.firebasestorage.app",
-  messagingSenderId: "137427086725",
-  appId: "1:137427086725:web:c2771ec90cacf5144828ec",
-  measurementId: "G-VM91DKQL1H"
+  authDomain: "sakitodo.firebaseapp.com", projectId: "sakitodo",
+  storageBucket: "sakitodo.firebasestorage.app", messagingSenderId: "137427086725",
+  appId: "1:137427086725:web:c2771ec90cacf5144828ec", measurementId: "G-VM91DKQL1H"
 };
-
 const isConfigured = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY";
 let db = null, currentUser = null;
-
 if (isConfigured) {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
@@ -430,30 +332,34 @@ if (isConfigured) {
 } else { showApp(null); }
 
 const CATS = {
-  work:  { icon: '💼', label: '工作待办', color: '#3b82f6', isTodo: true },
-  life:  { icon: '🏠', label: '生活待办', color: '#10b981', isTodo: true },
-  idea:  { icon: '💡', label: '想法',     color: '#f59e0b' },
-  learn: { icon: '📚', label: '学习',     color: '#6366f1' },
-  ai:    { icon: '🤖', label: 'AI可尝试', color: '#8b5cf6' }
+  work:  { label: '工作待办', color: '#3b82f6', isTodo: true },
+  life:  { label: '生活待办', color: '#10b981', isTodo: true },
+  idea:  { label: '想法',     color: '#f59e0b' },
+  learn: { label: '学习',     color: '#6366f1' },
+  ai:    { label: 'AI可尝试', color: '#8b5cf6' }
 };
-const PRI_LABELS = { h: '🔴 高', m: '🟡 中', l: '🟢 低' };
+const CAT_SHORT = { work: '工作', life: '生活', idea: '想法', learn: '学习', ai: 'AI试试' };
+const PRI_LABELS = { h: '高', m: '中', l: '低' };
+const PRI_ORDER = { h: 0, m: 1, l: 2 };
 
 let entries = JSON.parse(localStorage.getItem('braindump_v3') || '[]');
-let currentCat = 'work', currentPri = 'm', currentFilter = 'all';
+let currentCat = 'work', currentPri = 'm', currentFilter = 'all', currentSort = 'time';
 let loginMode = true;
 
 // Theme
 function initTheme() {
   const saved = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeBtn').textContent = saved === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeBtn').innerHTML = saved === 'dark'
+    ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+    : '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>';
 }
 function toggleTheme() {
   const cur = document.documentElement.getAttribute('data-theme');
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
-  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  initTheme();
 }
 initTheme();
 
@@ -473,13 +379,10 @@ function showApp(user) {
   }
   render();
 }
-function toggleLoginMode() { loginMode = !loginMode; document.getElementById('loginSubmit').textContent = loginMode ? '登录' : '注册'; document.getElementById('loginModeSwitch').textContent = loginMode ? '没有账号？点击注册' : '已有账号？点击登录'; document.getElementById('loginError').textContent = ''; }
+function toggleLoginMode() { loginMode = !loginMode; document.getElementById('loginModeSwitch').textContent = loginMode ? '没有账号？点击注册' : '已有账号？点击登录'; document.getElementById('loginError').textContent = ''; }
 async function loginGoogle() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await firebase.auth().signInWithPopup(provider);
-  } catch (e) { document.getElementById('loginError').textContent = translateError(e.code); }
+  try { await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (e) { document.getElementById('loginError').textContent = translateError(e.code); }
 }
 async function loginEmail() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
@@ -536,9 +439,10 @@ function fmtTime(ts) { return new Date(ts).toLocaleTimeString('zh-CN', { hour: '
 function fmtDateShort(ts) { const d = new Date(ts), n = new Date(); if (d.toDateString() === n.toDateString()) return '今天'; const y = new Date(n); y.setDate(y.getDate()-1); if (d.toDateString() === y.toDateString()) return '昨天'; return `${d.getMonth()+1}/${d.getDate()}`; }
 document.getElementById('headerDate').textContent = fmtDate(new Date());
 
-// Cat & Priority
+// Cat & Priority & Sort
 function setCat(cat) { currentCat = cat; document.querySelectorAll('.opt-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat)); }
 function setPri(p) { currentPri = p; document.querySelectorAll('.pri-btn').forEach(b => b.classList.toggle('active', b.classList.contains(p))); }
+function setSort(s) { currentSort = s; document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === s)); render(); }
 document.querySelectorAll('.filter-tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); currentFilter = tab.dataset.filter; render(); }));
 
 // Input
@@ -559,12 +463,8 @@ function addEntry() {
 function toggleDone(id) { const e = entries.find(e => e.id === id); if (e) { e.done = !e.done; syncToCloud(e); } saveLocal(); render(); }
 function deleteEntry(id) { entries = entries.filter(e => e.id !== id); syncToCloud({id}, 'delete'); saveLocal(); render(); }
 
-function changeCat(id, newCat) {
-  const e = entries.find(e => e.id === id);
-  if (e) { e.cat = newCat; syncToCloud(e); }
-  saveLocal(); render();
-  document.querySelectorAll('.cat-picker').forEach(p => p.remove());
-}
+function changeCat(id, newCat) { const e = entries.find(e => e.id === id); if (e) { e.cat = newCat; syncToCloud(e); } saveLocal(); render(); document.querySelectorAll('.cat-picker').forEach(p => p.remove()); }
+function changePri(id, newPri) { const e = entries.find(e => e.id === id); if (e) { e.pri = newPri; syncToCloud(e); } saveLocal(); render(); }
 
 function showCatPicker(id) {
   document.querySelectorAll('.cat-picker').forEach(p => p.remove());
@@ -572,7 +472,7 @@ function showCatPicker(id) {
   const picker = document.createElement('div');
   picker.className = 'cat-picker open';
   picker.innerHTML = Object.entries(CATS).map(([k, v]) =>
-    `<button class="cat-picker-item" onclick="changeCat(${id},'${k}')">${v.icon} ${v.label}</button>`
+    `<button class="cat-picker-item" onclick="changeCat(${id},'${k}')">${v.label}</button>`
   ).join('');
   card.appendChild(picker);
   setTimeout(() => document.addEventListener('click', function handler(e) { if (!e.target.closest('.cat-picker')) { picker.remove(); document.removeEventListener('click', handler); } }), 10);
@@ -582,10 +482,29 @@ function editEntry(id) {
   const card = document.querySelector(`[data-entry-id="${id}"]`);
   const e = entries.find(e => e.id === id);
   if (!e) return;
-  card.querySelector('.card-text').innerHTML = `<textarea class="edit-textarea" rows="2">${esc(e.text)}</textarea><div class="edit-btns"><button class="edit-btn edit-save" onclick="saveEdit(${id})">保存</button><button class="edit-btn edit-cancel" onclick="render()">取消</button></div>`;
+  const catBtns = Object.entries(CATS).map(([k, v]) =>
+    `<button class="opt-pill${e.cat===k?' active':''}" data-cat="${k}" onclick="this.parentElement.querySelectorAll('.opt-pill').forEach(b=>b.classList.remove('active'));this.classList.add('active');this.dataset.editCat='${k}'">${CAT_SHORT[k]}</button>`
+  ).join('');
+  const priBtns = ['h','m','l'].map(p =>
+    `<button class="pri-btn${e.pri===p?' active':''} ${p}" onclick="this.parentElement.querySelectorAll('.pri-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')" data-edit-pri="${p}">${PRI_LABELS[p]}</button>`
+  ).join('');
+  card.querySelector('.card-text').innerHTML = `
+    <textarea class="edit-textarea" rows="2">${esc(e.text)}</textarea>
+    <div class="edit-opts"><div class="input-options">${catBtns}</div><div class="pri-group">${priBtns}</div></div>
+    <div class="edit-btns"><button class="edit-btn edit-save" onclick="saveEdit(${id})">保存</button><button class="edit-btn edit-cancel" onclick="render()">取消</button></div>`;
   card.querySelector('textarea').focus();
 }
-function saveEdit(id) { const card = document.querySelector(`[data-entry-id="${id}"]`); const e = entries.find(e => e.id === id); const val = card.querySelector('textarea').value.trim(); if (val && e) { e.text = val; syncToCloud(e); } saveLocal(); render(); }
+function saveEdit(id) {
+  const card = document.querySelector(`[data-entry-id="${id}"]`);
+  const e = entries.find(e => e.id === id);
+  const val = card.querySelector('textarea').value.trim();
+  const activeCat = card.querySelector('.edit-opts .opt-pill.active');
+  const activePri = card.querySelector('.edit-opts .pri-btn.active');
+  if (val && e) { e.text = val; }
+  if (activeCat) e.cat = activeCat.dataset.cat;
+  if (activePri) e.pri = activePri.dataset.editPri;
+  syncToCloud(e); saveLocal(); render();
+}
 function saveLocal() { localStorage.setItem('braindump_v3', JSON.stringify(entries)); }
 
 // Render
@@ -596,13 +515,16 @@ function render() {
     `<div class="stat-chip${currentFilter===k?' active':''}" onclick="setFilter('${k}')"><span class="stat-dot" style="background:${v.color}"></span>${v.label} ${counts[k]}</div>`
   ).join('');
 
-  const filtered = currentFilter === 'all' ? entries : entries.filter(e => e.cat === currentFilter);
+  let filtered = currentFilter === 'all' ? [...entries] : entries.filter(e => e.cat === currentFilter);
+  if (currentSort === 'pri') filtered.sort((a, b) => (PRI_ORDER[a.pri]||1) - (PRI_ORDER[b.pri]||1));
+  else filtered.sort((a, b) => b.ts - a.ts);
+
   const list = document.getElementById('cardList');
-  if (!filtered.length) { list.innerHTML = `<div class="empty"><div class="empty-icon">🧠</div>${currentFilter==='all'?'把脑子里的东西倒出来吧':`还没有「${CATS[currentFilter]?.label}」`}</div>`; return; }
+  if (!filtered.length) { list.innerHTML = `<div class="empty">${currentFilter==='all'?'把脑子里的东西倒出来吧':`还没有「${CATS[currentFilter]?.label}」`}</div>`; return; }
   let html = '', lastDate = '';
   filtered.forEach(e => {
     const ds = fmtDateShort(e.ts);
-    if (ds !== lastDate) { lastDate = ds; html += `<div class="date-sep">${ds}</div>`; }
+    if (currentSort === 'time' && ds !== lastDate) { lastDate = ds; html += `<div class="date-sep">${ds}</div>`; }
     const cat = CATS[e.cat] || CATS.idea;
     const isTodo = cat.isTodo;
     html += `<div class="card" data-cat="${e.cat}" data-entry-id="${e.id}" ondblclick="editEntry(${e.id})">
@@ -612,13 +534,13 @@ function render() {
           <div class="card-text${e.done?' done':''}">${esc(e.text)}</div>
           <div class="card-footer">
             <div class="card-left">
-              <span class="card-tag ${e.cat}" onclick="showCatPicker(${e.id})">${cat.icon} ${cat.label}</span>
+              <span class="card-tag ${e.cat}" onclick="showCatPicker(${e.id})">${cat.label}</span>
               <span class="pri-badge ${e.pri||'m'}">${PRI_LABELS[e.pri||'m']}</span>
               <span class="card-time">${fmtTime(e.ts)}</span>
             </div>
             <div class="card-actions">
-              <button class="card-action-btn" onclick="editEntry(${e.id})">✏️</button>
-              <button class="card-action-btn del" onclick="deleteEntry(${e.id})">×</button>
+              <button class="card-action-btn" onclick="editEntry(${e.id})" title="编辑"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="card-action-btn del" onclick="deleteEntry(${e.id})" title="删除"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
             </div>
           </div>
         </div>
@@ -629,101 +551,150 @@ function render() {
 }
 function setFilter(f) { currentFilter = f; document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === f)); render(); }
 
-// Summary
+// Summary with time ranges
+let summaryRange = 'today';
+let customStart = '', customEnd = '';
+
+function getDateRange(range) {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  switch (range) {
+    case 'today': return { start: todayStart, end: Date.now(), label: '今日' };
+    case 'week': { const w = new Date(now); w.setDate(w.getDate() - w.getDay()); w.setHours(0,0,0,0); return { start: w.getTime(), end: Date.now(), label: '本周' }; }
+    case 'month': { const m = new Date(now.getFullYear(), now.getMonth(), 1); return { start: m.getTime(), end: Date.now(), label: '本月' }; }
+    case 'custom': {
+      if (!customStart || !customEnd) return { start: todayStart, end: Date.now(), label: '自定义' };
+      return { start: new Date(customStart).getTime(), end: new Date(customEnd + 'T23:59:59').getTime(), label: `${customStart} ~ ${customEnd}` };
+    }
+    default: return { start: todayStart, end: Date.now(), label: '今日' };
+  }
+}
+
 function showSummary() {
-  const today = new Date().toDateString();
-  const todayE = entries.filter(e => new Date(e.ts).toDateString() === today);
   const panel = document.getElementById('summaryPanel');
+  const range = getDateRange(summaryRange);
+  const rangeEntries = entries.filter(e => e.ts >= range.start && e.ts <= range.end);
   const counts = {}; Object.keys(CATS).forEach(k => counts[k] = []);
-  todayE.forEach(e => { if (counts[e.cat]) counts[e.cat].push(e); });
+  rangeEntries.forEach(e => { if (counts[e.cat]) counts[e.cat].push(e); });
+  const highPri = rangeEntries.filter(e => e.pri === 'h' && !e.done);
+  const doneCount = rangeEntries.filter(e => e.done).length;
+  const total = rangeEntries.length;
 
-  const highPri = todayE.filter(e => e.pri === 'h' && !e.done);
-  const doneCount = todayE.filter(e => e.done).length;
-  const total = todayE.length;
+  let html = `<div class="panel-handle"></div>
+    <div class="panel-title">复盘分析</div>
+    <div class="panel-sub">${range.label} - 记录 ${total} 条${doneCount ? ` - 完成 ${doneCount} 件` : ''}</div>`;
 
-  let html = `<div class="summary-handle"></div>
-    <div class="summary-title">📊 今日复盘</div>
-    <div class="summary-sub">${fmtDate(new Date())} · 记录 ${total} 条${doneCount ? ` · 完成 ${doneCount} 件` : ''}</div>`;
+  html += `<div class="time-tabs">${['today','week','month','custom'].map(r =>
+    `<button class="time-tab${summaryRange===r?' active':''}" onclick="summaryRange='${r}';${r==='custom'?'':'showSummary();'}">${r==='today'?'今日':r==='week'?'本周':r==='month'?'本月':'自定义'}</button>`).join('')}</div>`;
+  if (summaryRange === 'custom') {
+    html += `<div class="custom-range">
+      <input type="date" value="${customStart}" onchange="customStart=this.value">
+      <span style="color:var(--text3);font-size:12px">至</span>
+      <input type="date" value="${customEnd}" onchange="customEnd=this.value">
+      <button class="sort-btn active" onclick="showSummary()">确定</button></div>`;
+  }
 
-  // Deep insight
   const insights = [];
-  if (highPri.length > 0) insights.push(`🔴 还有 ${highPri.length} 件高优先级事项未完成，明天优先处理它们`);
-  if (counts.work.length > 3 && doneCount < counts.work.length) insights.push('💼 工作任务较多但完成率偏低，试着聚焦最重要的 1-2 件');
-  if (counts.life.length > 0 && counts.work.length === 0) insights.push('🏠 今天只记录了生活相关，工作的事也别忘了梳理');
-  if (counts.learn.length > 0) insights.push('📚 今天有学习记录，持续积累是最好的投资');
-  if (counts.idea.length >= 3) insights.push('💡 灵感迸发的一天，挑一个最有感觉的落地试试');
-  if (counts.ai.length > 0) insights.push('🤖 有值得用 AI 探索的问题，明天挑一个动手试试');
-  if (total === 0) insights.push('📝 今天没有记录，大脑清空了也是好事');
-  if (total > 10) insights.push('🧠 今天记录很多，说明你在积极思考');
-
-  if (insights.length) {
-    html += `<div class="insight-box"><h4>🌟 今日洞察</h4>${insights.map(i => `<div class="insight-line">${i}</div>`).join('')}</div>`;
+  if (total === 0) insights.push('这段时间没有记录，大脑清空了也是好事。');
+  if (highPri.length > 0) insights.push(`还有 ${highPri.length} 件高优先级事项未完成，建议优先处理`);
+  if (counts.work.length > 3 && doneCount < counts.work.length) insights.push('工作任务较多但完成率偏低，聚焦最重要的 1-2 件');
+  if (counts.life.length > 0 && counts.work.length === 0) insights.push('只记录了生活相关，工作的事也别忘了梳理');
+  if (counts.learn.length > 0) insights.push('有学习记录，持续积累是最好的投资');
+  if (counts.idea.length >= 3) insights.push('灵感较多，挑一个最有感觉的落地试试');
+  if (counts.ai.length > 0) insights.push('有值得用 AI 探索的问题，挑一个动手试试');
+  if (total > 10) insights.push('记录很多，说明你在积极思考');
+  if (doneCount > 0 && total > 0) {
+    const rate = Math.round(doneCount / total * 100);
+    insights.push(`完成率 ${rate}%，${rate >= 80 ? '执行力很强' : rate >= 50 ? '还不错，继续加油' : '偏低，减少同时进行的任务'}`);
   }
+  if (insights.length) html += `<div class="insight-box"><h4>洞察</h4>${insights.map(i => `<div class="insight-line">${i}</div>`).join('')}</div>`;
 
-  // Tomorrow guidance
-  const tomorrowActions = [];
-  highPri.forEach(e => tomorrowActions.push({ text: e.text, source: '今日高优未完成' }));
-  counts.work.filter(e => !e.done && e.pri === 'm').slice(0, 2).forEach(e => tomorrowActions.push({ text: e.text, source: '工作中优先级' }));
-  counts.learn.forEach(e => tomorrowActions.push({ text: `继续深入：${e.text}`, source: '学习延续' }));
-  counts.ai.forEach(e => tomorrowActions.push({ text: `动手试试：${e.text}`, source: 'AI 探索' }));
-  counts.idea.slice(0, 2).forEach(e => tomorrowActions.push({ text: `评估可行性：${e.text}`, source: '想法筛选' }));
+  const actions = [];
+  highPri.forEach(e => actions.push({ text: e.text, source: '高优未完成' }));
+  counts.work.filter(e => !e.done && e.pri === 'm').slice(0, 2).forEach(e => actions.push({ text: e.text, source: '工作中优先级' }));
+  counts.learn.forEach(e => actions.push({ text: `继续深入：${e.text}`, source: '学习延续' }));
+  counts.ai.forEach(e => actions.push({ text: `动手试试：${e.text}`, source: 'AI 探索' }));
+  counts.idea.slice(0, 2).forEach(e => actions.push({ text: `评估可行性：${e.text}`, source: '想法筛选' }));
+  if (actions.length) html += `<div class="panel-section"><h3>下一步建议 <span class="count-badge">${actions.length}</span></h3>${actions.map(a => `<div class="action-item"><div class="action-label">${a.source}</div>${esc(a.text)}</div>`).join('')}</div>`;
 
-  if (tomorrowActions.length) {
-    html += `<div class="summary-section"><h3>🌅 明日指引 <span class="summary-count">${tomorrowActions.length}</span></h3>
-      ${tomorrowActions.map(a => `<div class="action-item"><div class="action-label">${a.source}</div>${esc(a.text)}</div>`).join('')}</div>`;
-  }
-
-  // Category breakdown (compact)
   const hasAny = Object.values(counts).some(c => c.length > 0);
   if (hasAny) {
-    html += `<div class="summary-section"><h3>📋 分类明细</h3>`;
+    html += `<div class="panel-section"><h3>分类明细</h3>`;
     Object.entries(CATS).forEach(([k, v]) => {
       if (!counts[k].length) return;
-      html += `<div style="margin-bottom:8px"><div style="font-size:12px;color:var(--text2);margin-bottom:4px;">${v.icon} ${v.label} (${counts[k].length})</div>`;
-      counts[k].forEach(e => { html += `<div class="summary-item${e.done?'" style="opacity:0.5;text-decoration:line-through':''}">${esc(e.text)} <span class="pri-badge ${e.pri||'m'}" style="font-size:9px">${PRI_LABELS[e.pri||'m']}</span></div>`; });
+      const done = counts[k].filter(e => e.done).length;
+      html += `<div style="margin-bottom:8px"><div style="font-size:12px;color:var(--text2);margin-bottom:4px;">${v.label} (${counts[k].length}${done ? `/${done}完成` : ''})</div>`;
+      counts[k].forEach(e => { html += `<div class="panel-item"${e.done?' style="opacity:0.5;text-decoration:line-through"':''}>${esc(e.text)} <span class="pri-badge ${e.pri||'m'}" style="font-size:9px">${PRI_LABELS[e.pri||'m']}</span></div>`; });
       html += '</div>';
     });
     html += '</div>';
   }
-
-  // Life wisdom
-  html += `<div class="insight-box" style="margin-top:8px;">
-    <h4>💫 一句话</h4>
-    <div style="font-size:14px;line-height:1.8;color:var(--text2);">
-    ${getWisdom(todayE)}
-    </div>
-  </div>`;
-
-  if (isConfigured && currentUser) html += `<button class="close-summary" style="background:var(--accent);margin-top:8px" onclick="bulkSync()">☁️ 同步到云端</button>`;
-  html += `<button class="close-summary" onclick="closeSummary()">关闭</button>`;
+  html += `<div class="insight-box" style="margin-top:8px;"><h4>一句话</h4><div style="font-size:14px;line-height:1.8;color:var(--text2);">${getWisdom(rangeEntries)}</div></div>`;
+  if (isConfigured && currentUser) html += `<button class="close-btn accent" style="margin-top:8px" onclick="bulkSync()">同步到云端</button>`;
+  html += `<button class="close-btn" onclick="closePanel('summaryOverlay')">关闭</button>`;
   panel.innerHTML = html;
   document.getElementById('summaryOverlay').classList.add('open');
 }
 
-function getWisdom(entries) {
-  const hasWork = entries.some(e => e.cat === 'work');
-  const hasLife = entries.some(e => e.cat === 'life');
-  const hasLearn = entries.some(e => e.cat === 'learn');
-  const done = entries.filter(e => e.done).length;
-  const total = entries.length;
-
-  if (total === 0) return '空白的一天也是新的开始，明天从写下一条待办开始。';
-  if (done === total && total > 0) return '全部完成！执行力就是你的超能力。好好休息，明天继续。';
-  if (done === 0 && total > 3) return '想得多做得少很正常，明天只挑一件最重要的，先动起来。';
-  if (hasLearn) return '学习是对自己最好的投资，今天种下的种子，未来会开花。';
+function getWisdom(es) {
+  const hasWork = es.some(e => e.cat === 'work'), hasLife = es.some(e => e.cat === 'life'), hasLearn = es.some(e => e.cat === 'learn');
+  const done = es.filter(e => e.done).length, total = es.length;
+  if (total === 0) return '空白的一天也是新的开始，从写下一条待办开始。';
+  if (done === total && total > 0) return '全部完成，执行力就是你的超能力。好好休息，继续前进。';
+  if (done === 0 && total > 3) return '想得多做得少很正常，只挑一件最重要的，先动起来。';
+  if (hasLearn) return '学习是对自己最好的投资，种下的种子，未来会开花。';
   if (hasWork && hasLife) return '工作和生活都在转，保持平衡不容易，但你已经在做了。';
-  return '每一天的记录，都是你成长的证据。坚持下去。';
+  return '每一天的记录，都是成长的证据。坚持下去。';
 }
-
-function closeSummary() { document.getElementById('summaryOverlay').classList.remove('open'); }
 
 // Export
-function exportData() {
-  const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `braindump_${new Date().toISOString().slice(0,10)}.json`; a.click();
+let exportFmt = 'json', exportCats = Object.keys(CATS), exportRange = 'all';
+
+function showExport() {
+  const panel = document.getElementById('exportPanel');
+  let html = `<div class="panel-handle"></div><div class="panel-title">导出数据</div><div class="panel-sub">选择格式和范围</div>`;
+  html += `<div class="export-form"><label>导出格式</label><div class="export-opts">${['json','csv','excel'].map(f => `<button class="export-opt${exportFmt===f?' active':''}" onclick="exportFmt='${f}';showExport()">${f.toUpperCase()}</button>`).join('')}</div></div>`;
+  html += `<div class="export-form"><label>时间范围</label><div class="export-opts">${['all','today','week','month'].map(r => `<button class="export-opt${exportRange===r?' active':''}" onclick="exportRange='${r}';showExport()">${r==='all'?'全部':r==='today'?'今日':r==='week'?'本周':'本月'}</button>`).join('')}</div></div>`;
+  html += `<div class="export-form"><label>选择分类</label><div class="export-checks">
+    <label class="export-check"><input type="checkbox" ${exportCats.length===Object.keys(CATS).length?'checked':''} onchange="toggleAllCats(this.checked)"> 全选</label>
+    ${Object.entries(CATS).map(([k, v]) => `<label class="export-check"><input type="checkbox" value="${k}" ${exportCats.includes(k)?'checked':''} onchange="updateExportCats()"> ${v.label}</label>`).join('')}
+  </div></div>`;
+  html += `<button class="close-btn accent" onclick="doExport()">导出</button><button class="close-btn" onclick="closePanel('exportOverlay')">取消</button>`;
+  panel.innerHTML = html;
+  document.getElementById('exportOverlay').classList.add('open');
+}
+function toggleAllCats(checked) { exportCats = checked ? Object.keys(CATS) : []; showExport(); }
+function updateExportCats() { exportCats = Array.from(document.querySelectorAll('.export-check input[value]:checked')).map(i => i.value); }
+
+function getExportData() {
+  let data = entries.filter(e => exportCats.includes(e.cat));
+  if (exportRange !== 'all') { const r = getDateRange(exportRange); data = data.filter(e => e.ts >= r.start && e.ts <= r.end); }
+  return data;
 }
 
+function doExport() {
+  const data = getExportData();
+  if (!data.length) { toast('没有符合条件的数据'); return; }
+  const ds = new Date().toISOString().slice(0, 10);
+  if (exportFmt === 'json') {
+    downloadBlob(JSON.stringify(data, null, 2), `braindump_${ds}.json`, 'application/json');
+  } else if (exportFmt === 'csv') {
+    const rows = data.map(e => `"${CATS[e.cat]?.label||e.cat}","${PRI_LABELS[e.pri]||'中'}","${e.text.replace(/"/g,'""')}",${e.done?'是':'否'},"${new Date(e.ts).toLocaleString('zh-CN')}"`).join('\n');
+    downloadBlob('\uFEFF分类,优先级,内容,完成,时间\n' + rows, `braindump_${ds}.csv`, 'text/csv;charset=utf-8');
+  } else {
+    let t = '<table><thead><tr><th>分类</th><th>优先级</th><th>内容</th><th>完成</th><th>时间</th></tr></thead><tbody>';
+    data.forEach(e => { t += `<tr><td>${CATS[e.cat]?.label||e.cat}</td><td>${PRI_LABELS[e.pri]||'中'}</td><td>${esc(e.text)}</td><td>${e.done?'是':'否'}</td><td>${new Date(e.ts).toLocaleString('zh-CN')}</td></tr>`; });
+    t += '</tbody></table>';
+    downloadBlob(`<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>${t}</body></html>`, `braindump_${ds}.xls`, 'application/vnd.ms-excel');
+  }
+  closePanel('exportOverlay');
+  toast(`已导出 ${data.length} 条数据`);
+}
+
+function downloadBlob(content, filename, type) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([content], { type })); a.download = filename; a.click();
+}
+function closePanel(id) { document.getElementById(id).classList.remove('open'); }
 function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
