@@ -121,6 +121,8 @@
     .card[data-cat="idea"] { border-left-color: #f59e0b; }
     .card[data-cat="learn"] { border-left-color: #6366f1; }
     .card[data-cat="ai"] { border-left-color: #8b5cf6; }
+    .card.archived { opacity: 0.6; border-left-color: var(--text3); }
+    .restore-btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .card-top { display: flex; align-items: flex-start; gap: 10px; }
     .card-text { font-size: 14px; line-height: 1.6; color: var(--text); word-break: break-word; white-space: pre-wrap; flex: 1; min-width: 0; }
     .card-text.done { text-decoration: line-through; color: var(--text3); }
@@ -295,6 +297,7 @@
       <button class="filter-tab" data-filter="idea">想法</button>
       <button class="filter-tab" data-filter="learn">学习</button>
       <button class="filter-tab" data-filter="ai">AI试试</button>
+      <button class="filter-tab" data-filter="archive">归档</button>
     </div>
     <div class="sort-bar">
       <span>排序：</span>
@@ -461,7 +464,19 @@ function addEntry() {
 }
 
 function toggleDone(id) { const e = entries.find(e => e.id === id); if (e) { e.done = !e.done; syncToCloud(e); } saveLocal(); render(); }
-function deleteEntry(id) { entries = entries.filter(e => e.id !== id); syncToCloud({id}, 'delete'); saveLocal(); render(); }
+function deleteEntry(id) {
+  const e = entries.find(e => e.id === id);
+  if (e) { e.archived = true; e.archivedTs = Date.now(); syncToCloud(e); }
+  saveLocal(); render();
+}
+function restoreEntry(id) {
+  const e = entries.find(e => e.id === id);
+  if (e) { delete e.archived; delete e.archivedTs; syncToCloud(e); }
+  saveLocal(); render(); toast('已恢复');
+}
+function permanentDelete(id) {
+  if (confirm('确定永久删除？此操作不可撤销')) { entries = entries.filter(e => e.id !== id); syncToCloud({id}, 'delete'); saveLocal(); render(); }
+}
 
 function changeCat(id, newCat) { const e = entries.find(e => e.id === id); if (e) { e.cat = newCat; syncToCloud(e); } saveLocal(); render(); document.querySelectorAll('.cat-picker').forEach(p => p.remove()); }
 function changePri(id, newPri) { const e = entries.find(e => e.id === id); if (e) { e.pri = newPri; syncToCloud(e); } saveLocal(); render(); }
@@ -510,42 +525,63 @@ function saveLocal() { localStorage.setItem('braindump_v3', JSON.stringify(entri
 // Render
 function render() {
   const counts = {}; Object.keys(CATS).forEach(k => counts[k] = 0);
-  entries.forEach(e => { if (counts[e.cat] !== undefined) counts[e.cat]++; });
+  let archiveCount = 0;
+  entries.forEach(e => { if (e.archived) archiveCount++; else if (counts[e.cat] !== undefined) counts[e.cat]++; });
   document.getElementById('statsBar').innerHTML = Object.entries(CATS).map(([k, v]) =>
     `<div class="stat-chip${currentFilter===k?' active':''}" onclick="setFilter('${k}')"><span class="stat-dot" style="background:${v.color}"></span>${v.label} ${counts[k]}</div>`
-  ).join('');
+  ).join('') + `<div class="stat-chip${currentFilter==='archive'?' active':''}" onclick="setFilter('archive')" style="color:var(--text3)">归档 ${archiveCount}</div>`;
 
-  let filtered = currentFilter === 'all' ? [...entries] : entries.filter(e => e.cat === currentFilter);
-  if (currentSort === 'pri') filtered.sort((a, b) => (PRI_ORDER[a.pri]||1) - (PRI_ORDER[b.pri]||1));
+  const active = entries.filter(e => !e.archived);
+  const archived = entries.filter(e => e.archived);
+  let filtered;
+  if (currentFilter === 'archive') filtered = [...archived].sort((a, b) => (b.archivedTs||b.ts) - (a.archivedTs||a.ts));
+  else if (currentFilter === 'all') filtered = [...active];
+  else filtered = active.filter(e => e.cat === currentFilter);
+  if (currentSort === 'pri') filtered.sort((a, b) => (PRI_ORDER[a.pri]||1) - (PRI_ORDER[b.pri]||1) || b.ts - a.ts);
   else filtered.sort((a, b) => b.ts - a.ts);
 
   const list = document.getElementById('cardList');
-  if (!filtered.length) { list.innerHTML = `<div class="empty">${currentFilter==='all'?'把脑子里的东西倒出来吧':`还没有「${CATS[currentFilter]?.label}」`}</div>`; return; }
+  if (!filtered.length) { list.innerHTML = `<div class="empty">${currentFilter==='archive'?'归档是空的，删除的条目会出现在这里':currentFilter==='all'?'把脑子里的东西倒出来吧':`还没有「${CATS[currentFilter]?.label}」`}</div>`; return; }
   let html = '', lastDate = '';
   filtered.forEach(e => {
     const ds = fmtDateShort(e.ts);
-    if (currentSort === 'time' && ds !== lastDate) { lastDate = ds; html += `<div class="date-sep">${ds}</div>`; }
+    const isArchived = !!e.archived;
+    if (currentSort === 'time' && !isArchived && ds !== lastDate) { lastDate = ds; html += `<div class="date-sep">${ds}</div>`; }
     const cat = CATS[e.cat] || CATS.idea;
     const isTodo = cat.isTodo;
-    html += `<div class="card" data-cat="${e.cat}" data-entry-id="${e.id}" ondblclick="editEntry(${e.id})">
-      <div class="card-top">
-        ${isTodo ? `<div class="todo-check${e.done?' checked':''}" onclick="toggleDone(${e.id})"></div>` : ''}
-        <div style="flex:1;min-width:0;">
-          <div class="card-text${e.done?' done':''}">${esc(e.text)}</div>
-          <div class="card-footer">
-            <div class="card-left">
-              <span class="card-tag ${e.cat}" onclick="showCatPicker(${e.id})">${cat.label}</span>
-              <span class="pri-badge ${e.pri||'m'}">${PRI_LABELS[e.pri||'m']}</span>
-              <span class="card-time">${fmtTime(e.ts)}</span>
-            </div>
-            <div class="card-actions">
-              <button class="card-action-btn" onclick="editEntry(${e.id})" title="编辑"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-              <button class="card-action-btn del" onclick="deleteEntry(${e.id})" title="删除"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+    if (isArchived) {
+      html += `<div class="card archived" data-entry-id="${e.id}">
+        <div class="card-top"><div style="flex:1;min-width:0;">
+          <div class="card-text" style="text-decoration:line-through">${esc(e.text)}</div>
+          <div class="card-footer"><div class="card-left">
+            <span class="card-tag ${e.cat}">${cat.label}</span>
+            <span class="pri-badge ${e.pri||'m'}">${PRI_LABELS[e.pri||'m']}</span>
+            <span class="card-time">${fmtTime(e.ts)}</span>
+          </div><div class="card-actions">
+            <button class="restore-btn" onclick="restoreEntry(${e.id})">恢复</button>
+            <button class="card-action-btn del" onclick="permanentDelete(${e.id})" title="永久删除"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div></div></div></div></div>`;
+    } else {
+      html += `<div class="card" data-cat="${e.cat}" data-entry-id="${e.id}" ondblclick="editEntry(${e.id})">
+        <div class="card-top">
+          ${isTodo ? `<div class="todo-check${e.done?' checked':''}" onclick="toggleDone(${e.id})"></div>` : ''}
+          <div style="flex:1;min-width:0;">
+            <div class="card-text${e.done?' done':''}">${esc(e.text)}</div>
+            <div class="card-footer">
+              <div class="card-left">
+                <span class="card-tag ${e.cat}" onclick="showCatPicker(${e.id})">${cat.label}</span>
+                <span class="pri-badge ${e.pri||'m'}">${PRI_LABELS[e.pri||'m']}</span>
+                <span class="card-time">${fmtTime(e.ts)}</span>
+              </div>
+              <div class="card-actions">
+                <button class="card-action-btn" onclick="editEntry(${e.id})" title="编辑"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                <button class="card-action-btn del" onclick="deleteEntry(${e.id})" title="归档"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>`;
+      </div>`;
+    }
   });
   list.innerHTML = html;
 }
