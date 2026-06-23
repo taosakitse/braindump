@@ -478,15 +478,8 @@ async function loginGoogle() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    await firebase.auth().signInWithRedirect(provider);
+    await firebase.auth().signInWithPopup(provider);
   } catch (e) { document.getElementById('loginError').textContent = translateError(e.code); }
-}
-
-// Handle redirect result on page load
-if (isConfigured) {
-  firebase.auth().getRedirectResult().catch(e => {
-    if (e.code) document.getElementById('loginError').textContent = translateError(e.code);
-  });
 }
 async function loginEmail() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
