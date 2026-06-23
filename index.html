@@ -476,7 +476,17 @@ function showApp(user) {
 function toggleLoginMode() { loginMode = !loginMode; document.getElementById('loginSubmit').textContent = loginMode ? '登录' : '注册'; document.getElementById('loginModeSwitch').textContent = loginMode ? '没有账号？点击注册' : '已有账号？点击登录'; document.getElementById('loginError').textContent = ''; }
 async function loginGoogle() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
-  try { await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (e) { document.getElementById('loginError').textContent = translateError(e.code); }
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await firebase.auth().signInWithRedirect(provider);
+  } catch (e) { document.getElementById('loginError').textContent = translateError(e.code); }
+}
+
+// Handle redirect result on page load
+if (isConfigured) {
+  firebase.auth().getRedirectResult().catch(e => {
+    if (e.code) document.getElementById('loginError').textContent = translateError(e.code);
+  });
 }
 async function loginEmail() {
   if (!isConfigured) { toast('Firebase 未配置'); return; }
